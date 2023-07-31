@@ -103,7 +103,7 @@ export default function App() {
 						width="150px"
 						size="md"
 						onClick={() => {
-							location.reload
+							location.reload()
 						}}
 					>
 						Play again
