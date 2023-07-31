@@ -1,5 +1,5 @@
 import "./App.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const images = [
 	"https://icongr.am/devicon/angularjs-original.svg?size=128&color=currentColor",
@@ -20,6 +20,21 @@ export default function App() {
 	const [guessed, setGuessed] = useState([])
 	const [selected, setSelected] = useState([])
 
+	useEffect(() => {
+		if (selected.length === 2) {
+			if (selected[0].split("|")[1] === selected[1].split("|")[1]) {
+				setGuessed((guessed) => guessed.concat(selected))
+			}
+			setTimeout(() => setSelected([]), 1000)
+		}
+	}, [selected])
+
+	useEffect(() => {
+		if (guessed.length === images.length) {
+			alert("You win!")
+		}
+	}, [guessed])
+
 	return (
 		<>
 			<h1 style={{ fontSize: "50px", marginBottom: 8 }}>Memotest</h1>
@@ -30,18 +45,21 @@ export default function App() {
 					gap: 24,
 				}}
 			>
-				{images.map((image, index) => {
+				{images.map((image) => {
 					const [, url] = image.split("|")
 					return (
 						<li
-							onClick={() => setSelected((selected) => selected.concat(image))}
+							onClick={() =>
+								selected.length < 2 &&
+								setSelected((selected) => selected.concat(image))
+							}
 							style={{
 								curor: "pointer",
 								padding: 12,
 								border: "1px solid #666",
 								borderRadius: 12,
 							}}
-							key={index}
+							key={image}
 						>
 							{selected.includes(image) || guessed.includes(image) ? (
 								<img src={url} alt="icon" />
