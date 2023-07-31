@@ -20,6 +20,10 @@
 	padding: 0;
 }
 
+li {
+	list-style: none;
+}
+
 img {
 	max-width: 100%;
 	height: auto;
@@ -29,8 +33,11 @@ body {
 	margin: auto;
 	display: flex;
 	place-items: center;
-	max-width: 800px;
 	min-height: 100vh;
+}
+
+#root {
+	width: 100%;
 }
 
 main {
