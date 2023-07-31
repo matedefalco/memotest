@@ -1,5 +1,14 @@
 import "./App.css"
 import { useEffect, useState } from "react"
+import {
+	Alert,
+	AlertTitle,
+	AlertIcon,
+	Heading,
+	Button,
+	useColorMode,
+	Flex,
+} from "@chakra-ui/react"
 
 const images = [
 	"https://icongr.am/devicon/angularjs-original.svg?size=128&color=currentColor",
@@ -19,6 +28,9 @@ const images = [
 export default function App() {
 	const [guessed, setGuessed] = useState([])
 	const [selected, setSelected] = useState([])
+	const [win, setWin] = useState(false)
+
+	const { colorMode, toggleColorMode } = useColorMode()
 
 	useEffect(() => {
 		if (selected.length === 2) {
@@ -31,13 +43,18 @@ export default function App() {
 
 	useEffect(() => {
 		if (guessed.length === images.length) {
-			alert("You win!")
+			setWin(true)
 		}
 	}, [guessed])
 
 	return (
 		<>
-			<h1 style={{ fontSize: "50px", marginBottom: 8 }}>Memotest</h1>
+			<Flex justify="space-between">
+				<Heading mb={8}> Memotest</Heading>
+				<Button onClick={toggleColorMode}>
+					Toggle {colorMode === "light" ? "Dark" : "Light"}
+				</Button>
+			</Flex>
 			<ul
 				style={{
 					display: "grid",
@@ -75,6 +92,24 @@ export default function App() {
 					)
 				})}
 			</ul>
+			{win && (
+				<Flex flexDirection="column" alignItems="center" gap={4}>
+					<Alert mt={8} status="success">
+						<AlertIcon />
+						<AlertTitle>You win!</AlertTitle>
+					</Alert>
+					<Button
+						colorScheme="blue"
+						width="150px"
+						size="md"
+						onClick={() => {
+							location.reload
+						}}
+					>
+						Play again
+					</Button>
+				</Flex>
+			)}
 		</>
 	)
 }

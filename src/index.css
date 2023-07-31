@@ -33,7 +33,6 @@ body {
 	margin: auto;
 	display: flex;
 	place-items: center;
-	max-width: 800px;
 	min-height: 100vh;
 }
 
