@@ -20,7 +20,6 @@ const images = [
 	"https://icongr.am/devicon/ie10-original.svg?size=128&color=currentColor",
 	"https://icongr.am/devicon/nodejs-original.svg?size=128&color=currentColor",
 	"https://icongr.am/devicon/javascript-original.svg?size=128&color=currentColor",
-	"https://icongr.am/devicon/python-original.svg?size=128&color=currentColor",
 ]
 	.flatMap((image) => [`a|${image}`, `b|${image}`])
 	.sort(() => Math.random() - 0.5)
@@ -58,8 +57,8 @@ export default function App() {
 			<ul
 				style={{
 					display: "grid",
-					gridTemplateColumns: "repeat(auto-fill, minmax(128px, 1fr))",
-					gap: 24,
+					gridTemplateColumns: "repeat(auto-fill, minmax(15vw, 1fr))",
+					gap: 16,
 				}}
 			>
 				{images.map((image) => {
@@ -75,6 +74,8 @@ export default function App() {
 								padding: 12,
 								border: "1px solid #666",
 								borderRadius: 12,
+								display: "flex",
+								justifyContent: "center",
 							}}
 							key={image}
 						>
