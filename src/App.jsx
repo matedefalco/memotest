@@ -1,13 +1,17 @@
 import "./App.css"
 import { useEffect, useState } from "react"
 import {
-	Alert,
-	AlertTitle,
-	AlertIcon,
 	Heading,
 	Button,
 	useColorMode,
 	Flex,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalCloseButton,
+	useDisclosure,
 } from "@chakra-ui/react"
 
 const images = [
@@ -27,9 +31,9 @@ const images = [
 export default function App() {
 	const [guessed, setGuessed] = useState([])
 	const [selected, setSelected] = useState([])
-	const [win, setWin] = useState(false)
 
 	const { colorMode, toggleColorMode } = useColorMode()
+	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	useEffect(() => {
 		if (selected.length === 2) {
@@ -42,7 +46,7 @@ export default function App() {
 
 	useEffect(() => {
 		if (guessed.length === images.length) {
-			setWin(true)
+			onOpen()
 		}
 	}, [guessed])
 
@@ -100,24 +104,33 @@ export default function App() {
 					)
 				})}
 			</ul>
-			{win && (
-				<Flex flexDirection="column" alignItems="center" gap={4}>
-					<Alert mt={8} status="success">
-						<AlertIcon />
-						<AlertTitle>You win!</AlertTitle>
-					</Alert>
-					<Button
-						colorScheme="blue"
-						width="150px"
-						size="md"
-						onClick={() => {
-							location.reload()
-						}}
-					>
-						Play again
-					</Button>
-				</Flex>
-			)}
+			<Modal isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>You win!</ModalHeader>
+					<ModalCloseButton />
+					<ModalFooter>
+						<Button
+							colorScheme="blue"
+							size="md"
+							mr={3}
+							onClick={() => {
+								location.reload()
+							}}
+						>
+							Play again
+						</Button>
+						<Button
+							colorScheme="blue"
+							variant="ghost"
+							size="md"
+							onClick={onClose}
+						>
+							Close
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</>
 	)
 }
