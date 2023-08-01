@@ -70,7 +70,7 @@ export default function App() {
 								setSelected((selected) => selected.concat(image))
 							}
 							style={{
-								curor: "pointer",
+								cursor: "pointer",
 								padding: 12,
 								border: "1px solid #666",
 								borderRadius: 12,
@@ -81,10 +81,17 @@ export default function App() {
 						>
 							{selected.includes(image) || guessed.includes(image) ? (
 								<img src={url} alt="icon" />
+							) : colorMode === "light" ? (
+								<img
+									src={
+										"https://icongr.am/fontawesome/bomb.svg?size=128&color=000000"
+									}
+									alt="icon"
+								/>
 							) : (
 								<img
 									src={
-										"https://icongr.am/fontawesome/bomb.svg?size=128&color=currentColor"
+										"https://icongr.am/fontawesome/bomb.svg?size=128&color=FFFFFF"
 									}
 									alt="icon"
 								/>
