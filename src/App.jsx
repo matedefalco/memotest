@@ -91,14 +91,18 @@ export default function App() {
 					>
 						{images.map((image) => {
 							const [, url] = image.split("|")
+							const isImageSelected = selected.includes(image)
+							const isImageGuessed = guessed.includes(image)
 							return (
 								<li
-									onClick={() =>
-										selected.length < 2 &&
-										setSelected((selected) => selected.concat(image))
-									}
+									onClick={() => {
+										if (!isImageSelected && !isImageGuessed) {
+											setSelected((selected) => selected.concat(image))
+										}
+									}}
 									style={{
-										cursor: "pointer",
+										cursor:
+											isImageSelected || isImageGuessed ? "default" : "pointer",
 										padding: 12,
 										border: "1px solid #666",
 										borderRadius: 12,
@@ -107,8 +111,15 @@ export default function App() {
 									}}
 									key={image}
 								>
-									{selected.includes(image) || guessed.includes(image) ? (
+									{isImageSelected ? (
 										<img src={url} alt="icon" />
+									) : isImageGuessed ? (
+										<img
+											src={
+												"https://icongr.am/fontawesome/check-circle.svg?size=128&color=32c33c"
+											}
+											alt="icon"
+										/>
 									) : colorMode === "light" ? (
 										<img
 											src={
