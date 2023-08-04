@@ -12,6 +12,7 @@ import {
 	ModalFooter,
 	ModalCloseButton,
 	ModalBody,
+	Text,
 	useDisclosure,
 } from "@chakra-ui/react"
 
@@ -42,21 +43,6 @@ export default function App() {
 	const [maxScore, setMaxScore] = useState(false)
 
 	useEffect(() => {
-		if (time > 0) {
-			// Establecer un temporizador para reducir el tiempo
-			const timeout = setTimeout(() => setTime(time - 1), 1000)
-			return () => clearTimeout(timeout)
-		} else if (time === 0 && isPlaying) {
-			// Calcular el puntaje y actualizar la puntuación máxima
-			const calculatedScore = Math.round(time)
-			setScore(calculatedScore)
-			if (calculatedScore > maxScore) {
-				setMaxScore(calculatedScore)
-			}
-		}
-	}, [time, isPlaying])
-
-	useEffect(() => {
 		if (selected.length === 2) {
 			if (selected[0].split("|")[1] === selected[1].split("|")[1]) {
 				setGuessed((guessed) => guessed.concat(selected))
@@ -66,10 +52,22 @@ export default function App() {
 	}, [selected])
 
 	useEffect(() => {
-		if (guessed.length === images.length || time === 0) {
+		if (guessed.length === images.length) {
 			onOpen()
+			// Calcular el puntaje y actualizar la puntuación máxima
+			const calculatedScore = Math.round(time)
+			setScore(calculatedScore)
+			if (calculatedScore > maxScore) {
+				setMaxScore(calculatedScore)
+			}
+		} else if (time === 0) {
+			onOpen()
+			setScore(0)
+		} else if (time > 0) {
+			const timeout = setTimeout(() => setTime(time - 1), 1000)
+			return () => clearTimeout(timeout)
 		}
-	}, [guessed])
+	}, [time, guessed])
 
 	return (
 		<>
@@ -81,7 +79,9 @@ export default function App() {
 							Toggle {colorMode === "light" ? "Dark" : "Light"}
 						</Button>
 					</Flex>
-					
+					<Text fontSize="xl" mb={4} color={time < 10 ? "red" : "inherit"}>
+						Time left: {time}
+					</Text>
 					<ul
 						style={{
 							display: "grid",
@@ -133,10 +133,16 @@ export default function App() {
 						<ModalContent>
 							<ModalHeader>Game Over</ModalHeader>
 							<ModalBody>
-								<Flex flexDirection="column" gap={2}>
-									Your score: {score}
-									Your MAX score: {maxScore}
-								</Flex>
+								{score !== 0 ? (
+									<Flex flexDirection="column" gap={2}>
+										<Text>Your score: {score}</Text>
+										<Text>Your MAX score: {maxScore}</Text>
+									</Flex>
+								) : (
+									<Flex flexDirection="column" gap={2}>
+										<Text>You lost, try again!</Text>
+									</Flex>
+								)}
 							</ModalBody>
 							<ModalCloseButton />
 							<ModalFooter>
@@ -145,7 +151,12 @@ export default function App() {
 									size="md"
 									mr={3}
 									onClick={() => {
-										location.reload()
+										setIsPlaying(true)
+										setTime(60)
+										setScore(0)
+										setGuessed([])
+										setSelected([])
+										onClose()
 									}}
 								>
 									Play again
@@ -169,7 +180,6 @@ export default function App() {
 							Toggle {colorMode === "light" ? "Dark" : "Light"}
 						</Button>
 					</Flex>
-
 					<Flex flexDirection="column" gap={4} alignItems="center">
 						<Heading size="2xl">Memotest</Heading>
 						<Heading as="h2" size="sm">
