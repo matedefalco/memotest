@@ -16,6 +16,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react"
 
+// Array de imágenes para el juego
 const images = [
 	"https://icongr.am/devicon/angularjs-original.svg?size=128&color=currentColor",
 	"https://icongr.am/devicon/c-original.svg?size=128&color=currentColor",
@@ -27,43 +28,57 @@ const images = [
 	"https://icongr.am/devicon/nodejs-original.svg?size=128&color=currentColor",
 	"https://icongr.am/devicon/javascript-original.svg?size=128&color=currentColor",
 ]
+	// Duplicar las imágenes y agregarles un prefijo para identificar las parejas
 	.flatMap((image) => [`a|${image}`, `b|${image}`])
+	// Ordenar aleatoriamente el array
 	.sort(() => Math.random() - 0.5)
 
 export default function App() {
+	// Estado para las cartas adivinadas
 	const [guessed, setGuessed] = useState([])
+	// Estado para las cartas seleccionadas por el jugador
 	const [selected, setSelected] = useState([])
+	// Estado para el color del modo de la aplicación
 	const { colorMode, toggleColorMode } = useColorMode()
+	// Estado para el estado del modal
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	// Estado para el tiempo restante
 	const [time, setTime] = useState(-1)
 	// Estado para el estado de juego (jugando o no)
 	const [isPlaying, setIsPlaying] = useState(false)
+	// Estado para la puntuación actual
 	const [score, setScore] = useState(false)
+	// Estado para la puntuación máxima
 	const [maxScore, setMaxScore] = useState(false)
 
+	// Efecto para manejar la lógica de cuando el jugador selecciona 2 cartas
 	useEffect(() => {
 		if (selected.length === 2) {
+			// Si el jugador adivina las 2 cartas, se agregan a las cartas adivinadas
 			if (selected[0].split("|")[1] === selected[1].split("|")[1]) {
 				setGuessed((guessed) => guessed.concat(selected))
 			}
+			// Limpiar las cartas seleccionadas después de 1 segundo
 			setTimeout(() => setSelected([]), 1000)
 		}
 	}, [selected])
 
+	// Efecto para manejar el final del juego o el tiempo restante
 	useEffect(() => {
 		if (guessed.length === images.length) {
+			// Si el jugador adivina todas las cartas, se muestra el modal y se actualiza la puntuación máxima
 			onOpen()
-			// Calcular el puntaje y actualizar la puntuación máxima
 			const calculatedScore = Math.round(time)
 			setScore(calculatedScore)
 			if (calculatedScore > maxScore) {
 				setMaxScore(calculatedScore)
 			}
 		} else if (time === 0) {
+			// Si el tiempo se agota, se muestra el modal con puntuación cero
 			onOpen()
 			setScore(0)
 		} else if (time > 0) {
+			// Si el tiempo es mayor a cero, se establece un temporizador para reducir el tiempo
 			const timeout = setTimeout(() => setTime(time - 1), 1000)
 			return () => clearTimeout(timeout)
 		}
@@ -73,15 +88,18 @@ export default function App() {
 		<>
 			{isPlaying ? (
 				<div>
+					{/* Encabezado y botón para cambiar el color */}
 					<Flex justify="space-between">
-						<Heading mb={8}> Memotest</Heading>
+						<Heading mb={8}>Memotest</Heading>
 						<Button onClick={toggleColorMode}>
 							Toggle {colorMode === "light" ? "Dark" : "Light"}
 						</Button>
 					</Flex>
+					{/* Mostrar el tiempo restante */}
 					<Text fontSize="xl" mb={4} color={time < 10 ? "red" : "inherit"}>
 						Time left: {time}
 					</Text>
+					{/* Lista de cartas */}
 					<ul
 						style={{
 							display: "grid",
@@ -96,6 +114,7 @@ export default function App() {
 							return (
 								<li
 									onClick={() => {
+										// Evitar que se haga clic en cartas ya adivinadas o seleccionadas
 										if (!isImageSelected && !isImageGuessed) {
 											setSelected((selected) => selected.concat(image))
 										}
@@ -111,6 +130,7 @@ export default function App() {
 									}}
 									key={image}
 								>
+									{/* Mostrar la imagen seleccionada, la carta adivinada o la bomba según el estado */}
 									{isImageSelected ? (
 										<img src={url} alt="icon" />
 									) : isImageGuessed ? (
@@ -139,6 +159,7 @@ export default function App() {
 							)
 						})}
 					</ul>
+					{/* Modal al final del juego */}
 					<Modal isOpen={isOpen} onClose={onClose}>
 						<ModalOverlay />
 						<ModalContent>
@@ -157,6 +178,7 @@ export default function App() {
 							</ModalBody>
 							<ModalCloseButton />
 							<ModalFooter>
+								{/* Botón para jugar nuevamente */}
 								<Button
 									colorScheme="blue"
 									size="md"
@@ -172,6 +194,7 @@ export default function App() {
 								>
 									Play again
 								</Button>
+								{/* Botón para cerrar el modal */}
 								<Button
 									colorScheme="blue"
 									variant="ghost"
@@ -186,6 +209,7 @@ export default function App() {
 				</div>
 			) : (
 				<div>
+					{/* Botón para cambiar el color */}
 					<Flex justify="flex-end">
 						<Button onClick={toggleColorMode}>
 							Toggle {colorMode === "light" ? "Dark" : "Light"}
@@ -196,6 +220,7 @@ export default function App() {
 						<Heading as="h2" size="sm">
 							Put your memory to test
 						</Heading>
+						{/* Botón para comenzar a jugar */}
 						<Button
 							colorScheme="blue"
 							size="md"
