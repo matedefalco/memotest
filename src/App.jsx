@@ -6,6 +6,7 @@ import {
 	useColorMode,
 	Flex,
 	Modal,
+	Box,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
@@ -14,6 +15,9 @@ import {
 	ModalBody,
 	Text,
 	useDisclosure,
+	Image,
+	List,
+	ListItem,
 } from "@chakra-ui/react"
 
 // Array de imágenes para el juego
@@ -32,6 +36,12 @@ const images = [
 	.flatMap((image) => [`a|${image}`, `b|${image}`])
 	// Ordenar aleatoriamente el array
 	.sort(() => Math.random() - 0.5)
+
+const imgUrls = [
+	"https://cdn1.iconfinder.com/data/icons/programing-development-8/24/react_logo-512.png",
+	"https://avatars.githubusercontent.com/u/54212428?s=280&v=4",
+	"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/1039px-Vitejs-logo.svg.png",
+]
 
 export default function App() {
 	// Estado para las cartas adivinadas
@@ -87,7 +97,7 @@ export default function App() {
 	return (
 		<>
 			{isPlaying ? (
-				<div>
+				<Box height="100%">
 					{/* Encabezado y botón para cambiar el color */}
 					<Flex justify="space-between">
 						<Heading mb={8}>Memotest</Heading>
@@ -206,9 +216,9 @@ export default function App() {
 							</ModalFooter>
 						</ModalContent>
 					</Modal>
-				</div>
+				</Box>
 			) : (
-				<div>
+				<Box height="100%">
 					{/* Botón para cambiar el color */}
 					<Flex justify="flex-end">
 						<Button onClick={toggleColorMode}>
@@ -233,7 +243,26 @@ export default function App() {
 							Play
 						</Button>
 					</Flex>
-				</div>
+					<Flex flexDirection="column" alignItems="center" marginTop={8}>
+						<Text fontSize="md" color="gray">
+							Made with:
+						</Text>
+						<List display="flex" alignItems="center" gap={4}>
+							{imgUrls.map((url, index) => (
+								<ListItem
+									display="flex"
+									alignItems="center"
+									justifyContent="center"
+									w={10}
+									h={10}
+									key={index}
+								>
+									<Image src={url} alt={`Image ${index}`} />
+								</ListItem>
+							))}
+						</List>
+					</Flex>
+				</Box>
 			)}
 		</>
 	)
