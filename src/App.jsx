@@ -1,12 +1,11 @@
 import "./App.css"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Fragment } from "react"
 import {
 	Heading,
 	Button,
 	useColorMode,
 	Flex,
 	Modal,
-	Box,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
@@ -95,9 +94,9 @@ export default function App() {
 	}, [time, guessed])
 
 	return (
-		<>
+		<Fragment>
 			{isPlaying ? (
-				<Box height="100%">
+				<section>
 					{/* Encabezado y botón para cambiar el color */}
 					<Flex justify="space-between">
 						<Heading mb={8}>Memotest</Heading>
@@ -170,7 +169,7 @@ export default function App() {
 						})}
 					</ul>
 					{/* Modal al final del juego */}
-					<Modal isOpen={isOpen} onClose={onClose}>
+					<Modal isOpen={isOpen} onClose={onClose} size="md">
 						<ModalOverlay />
 						<ModalContent>
 							<ModalHeader>Game Over</ModalHeader>
@@ -216,9 +215,9 @@ export default function App() {
 							</ModalFooter>
 						</ModalContent>
 					</Modal>
-				</Box>
+				</section>
 			) : (
-				<Box height="100%">
+				<section>
 					{/* Botón para cambiar el color */}
 					<Flex justify="flex-end">
 						<Button onClick={toggleColorMode}>
@@ -262,8 +261,8 @@ export default function App() {
 							))}
 						</List>
 					</Flex>
-				</Box>
+				</section>
 			)}
-		</>
+		</Fragment>
 	)
 }

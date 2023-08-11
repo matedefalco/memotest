@@ -14,6 +14,13 @@
 	-webkit-text-size-adjust: 100%;
 }
 
+section {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 80vh;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -27,6 +34,11 @@ li {
 img {
 	max-width: 100%;
 	height: auto;
+}
+
+html,
+body {
+	height: 100%;
 }
 
 body {
