@@ -94,6 +94,16 @@ export default function App() {
 		}
 	}, [time, guessed])
 
+	// Función para manejar el clic en una carta
+	const handleCardClick = (image) => {
+		const isImageSelected = selected.includes(image)
+		const isImageGuessed = guessed.includes(image)
+
+		if (!isImageSelected && !isImageGuessed && selected.length < 2) {
+			setSelected((prevSelected) => [...prevSelected, image])
+		}
+	}
+
 	return (
 		<Fragment>
 			{isPlaying ? (
@@ -125,12 +135,7 @@ export default function App() {
 							const isImageGuessed = guessed.includes(image)
 							return (
 								<li
-									onClick={() => {
-										// Evitar que se haga clic en cartas ya adivinadas o seleccionadas
-										if (!isImageSelected && !isImageGuessed) {
-											setSelected((selected) => selected.concat(image))
-										}
-									}}
+									onClick={() => handleCardClick(image)}
 									style={{
 										cursor:
 											isImageSelected || isImageGuessed ? "default" : "pointer",
