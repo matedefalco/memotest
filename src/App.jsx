@@ -107,7 +107,7 @@ export default function App() {
 	return (
 		<Fragment>
 			{isPlaying ? (
-				<section>
+				<section className="section">
 					{/* Encabezado y botón para cambiar el color */}
 					<Flex justify="space-between">
 						<Link href="https://memotest-matedefalco.vercel.app/">
@@ -179,6 +179,7 @@ export default function App() {
 					{time == 0 && (
 						<Button
 							colorScheme="blue"
+							marginTop={8}
 							size="md"
 							onClick={() => {
 								setIsPlaying(true)
@@ -189,10 +190,9 @@ export default function App() {
 							Start over
 						</Button>
 					)}
-					{/* Modal al final del juego */}
-					<Modal isOpen={isOpen} onClose={onClose} size="md">
+					<Modal isOpen={isOpen} onClose={onClose} isCentered>
 						<ModalOverlay />
-						<ModalContent>
+						<ModalContent margin={4}>
 							<ModalHeader>Game Over</ModalHeader>
 							<ModalBody>
 								{score !== 0 ? (
@@ -238,8 +238,8 @@ export default function App() {
 					</Modal>
 				</section>
 			) : (
-				<section>
-					{/* Botón para cambiar el color */}
+				<section className="section">
+					{/* !PLAYING */}
 					<Flex justify="flex-end">
 						<Button onClick={toggleColorMode}>
 							Toggle {colorMode === "light" ? "Dark" : "Light"}

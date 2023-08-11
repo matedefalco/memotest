@@ -14,11 +14,12 @@
 	-webkit-text-size-adjust: 100%;
 }
 
-section {
+.section {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	height: 80vh;
+	margin: 16px;
 }
 
 * {
@@ -50,8 +51,4 @@ body {
 
 #root {
 	width: 100%;
-}
-
-main {
-	padding: 1rem;
 }
