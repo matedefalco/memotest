@@ -1,11 +1,13 @@
 import "./App.css"
-import { useEffect, useState, Fragment } from "react"
+import { useEffect, useState } from "react"
 import {
 	Heading,
 	Button,
 	useColorMode,
 	Flex,
 	Modal,
+	Box,
+	Progress,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
@@ -105,30 +107,29 @@ export default function App() {
 	}
 
 	return (
-		<Fragment>
+		<div className="container">
 			{isPlaying ? (
-				<section className="section">
+				<section className="gameScreen">
 					{/* Encabezado y botón para cambiar el color */}
-					<Flex justify="space-between">
-						<Link href="https://memotest-matedefalco.vercel.app/">
-							<Heading mb={8}>Memotest</Heading>
-						</Link>
-						<Button onClick={toggleColorMode}>
-							Toggle {colorMode === "light" ? "Dark" : "Light"}
-						</Button>
+					<Flex flexDirection="column" gap={4}>
+						<Flex justifyContent="flex-end">
+							<Button onClick={toggleColorMode}>
+								Toggle {colorMode === "light" ? "Dark" : "Light"}
+							</Button>
+						</Flex>
+						<Flex flexDirection="column" alignItems="center" gap={1}>
+							<Link href="https://memotest-matedefalco.vercel.app/">
+								<Heading size="xl">Memotest</Heading>
+							</Link>
+							<Box height="16px" width="100%">
+								<Progress colorScheme="red" value={(time * 100) / 60} />
+							</Box>
+							<Text color="red" size="lg" as="b">
+								{time}
+							</Text>
+						</Flex>
 					</Flex>
-					{/* Mostrar el tiempo restante */}
-					<Text fontSize="xl" mb={4} color={time < 10 ? "red" : "inherit"}>
-						Time left: {time}
-					</Text>
-					{/* Lista de cartas */}
-					<ul
-						style={{
-							display: "grid",
-							gridTemplateColumns: "repeat(auto-fill, minmax(15vw, 1fr))",
-							gap: 16,
-						}}
-					>
+					<ul className="gameUl">
 						{images.map((image) => {
 							const [, url] = image.split("|")
 							const isImageSelected = selected.includes(image)
@@ -238,7 +239,7 @@ export default function App() {
 					</Modal>
 				</section>
 			) : (
-				<section className="section">
+				<section className="firstScreen">
 					{/* !PLAYING */}
 					<Flex justify="flex-end">
 						<Button onClick={toggleColorMode}>
@@ -263,7 +264,7 @@ export default function App() {
 							Play
 						</Button>
 					</Flex>
-					<Flex flexDirection="column" alignItems="center" marginTop={8}>
+					<Flex flexDirection="column" alignItems="center">
 						<Text fontSize="md" color="gray">
 							Made with:
 						</Text>
@@ -284,6 +285,6 @@ export default function App() {
 					</Flex>
 				</section>
 			)}
-		</Fragment>
+		</div>
 	)
 }
