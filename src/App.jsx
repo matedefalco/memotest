@@ -7,6 +7,7 @@ import {
 	Flex,
 	Modal,
 	Box,
+	Progress,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
@@ -16,6 +17,7 @@ import {
 	Text,
 	useDisclosure,
 	Image,
+	Link,
 	List,
 	ListItem,
 } from "@chakra-ui/react"
@@ -94,41 +96,47 @@ export default function App() {
 		}
 	}, [time, guessed])
 
+	// Función para manejar el clic en una carta
+	const handleCardClick = (image) => {
+		const isImageSelected = selected.includes(image)
+		const isImageGuessed = guessed.includes(image)
+
+		if (!isImageSelected && !isImageGuessed && selected.length < 2) {
+			setSelected((prevSelected) => [...prevSelected, image])
+		}
+	}
+
 	return (
-		<>
+		<div className="container">
 			{isPlaying ? (
-				<Box height="100%">
+				<section className="gameScreen">
 					{/* Encabezado y botón para cambiar el color */}
-					<Flex justify="space-between">
-						<Heading mb={8}>Memotest</Heading>
-						<Button onClick={toggleColorMode}>
-							Toggle {colorMode === "light" ? "Dark" : "Light"}
-						</Button>
+					<Flex flexDirection="column" gap={4}>
+						<Flex justifyContent="flex-end">
+							<Button onClick={toggleColorMode}>
+								Toggle {colorMode === "light" ? "Dark" : "Light"}
+							</Button>
+						</Flex>
+						<Flex flexDirection="column" alignItems="center" gap={1}>
+							<Link href="https://memotest-matedefalco.vercel.app/">
+								<Heading size="xl">Memotest</Heading>
+							</Link>
+							<Box height="16px" width="100%">
+								<Progress colorScheme="red" value={(time * 100) / 60} />
+							</Box>
+							<Text color="red" size="lg" as="b">
+								{time}
+							</Text>
+						</Flex>
 					</Flex>
-					{/* Mostrar el tiempo restante */}
-					<Text fontSize="xl" mb={4} color={time < 10 ? "red" : "inherit"}>
-						Time left: {time}
-					</Text>
-					{/* Lista de cartas */}
-					<ul
-						style={{
-							display: "grid",
-							gridTemplateColumns: "repeat(auto-fill, minmax(15vw, 1fr))",
-							gap: 16,
-						}}
-					>
+					<ul className="gameUl">
 						{images.map((image) => {
 							const [, url] = image.split("|")
 							const isImageSelected = selected.includes(image)
 							const isImageGuessed = guessed.includes(image)
 							return (
 								<li
-									onClick={() => {
-										// Evitar que se haga clic en cartas ya adivinadas o seleccionadas
-										if (!isImageSelected && !isImageGuessed) {
-											setSelected((selected) => selected.concat(image))
-										}
-									}}
+									onClick={() => handleCardClick(image)}
 									style={{
 										cursor:
 											isImageSelected || isImageGuessed ? "default" : "pointer",
@@ -169,10 +177,23 @@ export default function App() {
 							)
 						})}
 					</ul>
-					{/* Modal al final del juego */}
-					<Modal isOpen={isOpen} onClose={onClose}>
+					{time == 0 && (
+						<Button
+							colorScheme="blue"
+							marginTop={8}
+							size="md"
+							onClick={() => {
+								setIsPlaying(true)
+								setTime(60)
+								setScore(0)
+							}}
+						>
+							Start over
+						</Button>
+					)}
+					<Modal isOpen={isOpen} onClose={onClose} isCentered>
 						<ModalOverlay />
-						<ModalContent>
+						<ModalContent margin={4}>
 							<ModalHeader>Game Over</ModalHeader>
 							<ModalBody>
 								{score !== 0 ? (
@@ -216,10 +237,10 @@ export default function App() {
 							</ModalFooter>
 						</ModalContent>
 					</Modal>
-				</Box>
+				</section>
 			) : (
-				<Box height="100%">
-					{/* Botón para cambiar el color */}
+				<section className="firstScreen">
+					{/* !PLAYING */}
 					<Flex justify="flex-end">
 						<Button onClick={toggleColorMode}>
 							Toggle {colorMode === "light" ? "Dark" : "Light"}
@@ -243,7 +264,7 @@ export default function App() {
 							Play
 						</Button>
 					</Flex>
-					<Flex flexDirection="column" alignItems="center" marginTop={8}>
+					<Flex flexDirection="column" alignItems="center">
 						<Text fontSize="md" color="gray">
 							Made with:
 						</Text>
@@ -262,8 +283,8 @@ export default function App() {
 							))}
 						</List>
 					</Flex>
-				</Box>
+				</section>
 			)}
-		</>
+		</div>
 	)
 }
