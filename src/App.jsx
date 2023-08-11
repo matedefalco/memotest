@@ -15,6 +15,7 @@ import {
 	Text,
 	useDisclosure,
 	Image,
+	Link,
 	List,
 	ListItem,
 } from "@chakra-ui/react"
@@ -99,7 +100,9 @@ export default function App() {
 				<section>
 					{/* Encabezado y botón para cambiar el color */}
 					<Flex justify="space-between">
-						<Heading mb={8}>Memotest</Heading>
+						<Link href="https://memotest-matedefalco.vercel.app/">
+							<Heading mb={8}>Memotest</Heading>
+						</Link>
 						<Button onClick={toggleColorMode}>
 							Toggle {colorMode === "light" ? "Dark" : "Light"}
 						</Button>
@@ -168,6 +171,19 @@ export default function App() {
 							)
 						})}
 					</ul>
+					{time == 0 && (
+						<Button
+							colorScheme="blue"
+							size="md"
+							onClick={() => {
+								setIsPlaying(true)
+								setTime(60)
+								setScore(0)
+							}}
+						>
+							Start over
+						</Button>
+					)}
 					{/* Modal al final del juego */}
 					<Modal isOpen={isOpen} onClose={onClose} size="md">
 						<ModalOverlay />
